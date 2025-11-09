@@ -1,57 +1,62 @@
 body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  background-color: #111;
+  background-color: #101010;
   color: #fff;
+  font-family: "Segoe UI", sans-serif;
+  text-align: center;
+  margin: 0;
   padding: 20px;
 }
 
 h1 {
-  margin-bottom: 20px;
-}
-
-/* Top row: score and upgrades */
-.top-row {
-  display: flex;
-  justify-content: space-around;
+  color: #0ff;
+  text-shadow: 0 0 10px #0ff;
   margin-bottom: 30px;
 }
 
-.score {
-  font-size: 1.5em;
+#scoreBoard {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  font-size: 1.4em;
+  margin-bottom: 20px;
 }
 
-.upgrades {
-  text-align: left;
-}
-
-#upgradeButtons button {
-  display: block;
-  margin: 5px 0;
-  padding: 10px 20px;
+#coinBtn {
+  background: none;
   border: none;
-  border-radius: 6px;
+  cursor: pointer;
+  margin: 20px auto;
+}
+
+#coinBtn img {
+  width: 180px;
+  height: 180px;
+  transition: transform 0.1s ease;
+}
+
+#coinBtn:active img {
+  transform: scale(0.9);
+}
+
+#upgrades {
+  margin-top: 30px;
+}
+
+.upgradeBtn {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 25px;
+  font-size: 1em;
   background-color: #0ff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
   color: #111;
-  cursor: pointer;
-  transition: background-color 0.2s;
+  transition: 0.2s;
 }
 
-#upgradeButtons button:hover {
-  background-color: #0aa;
-}
-
-/* Coin container */
-.coin-container {
-  margin-top: 20px;
-}
-
-#coin {
-  width: 150px;
-  cursor: pointer;
-  transition: transform 0.1s;
-}
-
-#coin:active {
-  transform: scale(1.1);
+.upgradeBtn:hover {
+  background-color: #09c;
+  transform: scale(1.05);
 }
