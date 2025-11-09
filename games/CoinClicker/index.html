@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coin Clicker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Coin Clicker</h1>
+
+  <div class="top-row">
+    <div class="score">
+      Score: <span id="coinCount">0</span>
+    </div>
+    <div class="upgrades">
+      <h3>Upgrades</h3>
+      <div id="upgradeButtons"></div>
+    </div>
+  </div>
+
+  <div class="coin-container">
+    <img id="coin" src="assets/coin.png" alt="Coin">
+  </div>
+
+  <audio id="clickSfx" src="assets/click-sfx.mp3"></audio>
+  <audio id="coinSfx" src="assets/coin-sfx.mp3"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
