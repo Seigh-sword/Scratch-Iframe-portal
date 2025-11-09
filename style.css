@@ -1,5 +1,3 @@
-
-/* General body styles */
 body {
   font-family: Arial, sans-serif;
   background-color: #111;
@@ -9,16 +7,14 @@ body {
   padding: 20px;
 }
 
-/* Header styles */
 header h1 {
   margin-bottom: 5px;
-  font-size: 2.5em;
+  font-size: 2em;
 }
 
 header p {
   margin-top: 0;
   color: #aaa;
-  font-size: 1em;
 }
 
 /* Card container */
@@ -46,20 +42,17 @@ header p {
   box-shadow: 0 0 15px #0ff;
 }
 
-/* Card title */
 .card h3 {
   margin: 0 0 10px 0;
   font-size: 1.2em;
 }
 
-/* Card author */
 .card p {
-  margin: 0 0 15px 0;
+  margin: 0 0 10px 0;
   color: #aaa;
   font-size: 0.9em;
 }
 
-/* Play button */
 .card button {
   padding: 10px 20px;
   border: none;
@@ -68,10 +61,32 @@ header p {
   color: #111;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.2s;
 }
 
 .card button:hover {
   background-color: #0aa;
-  transform: scale(1.05);
+}
+
+/* Iframe container */
+#iframeContainer {
+  margin-top: 20px;
+  display: none; /* hidden until play clicked */
+}
+
+#iframeButtons {
+  margin-top: 10px;
+}
+
+#iframeButtons button {
+  margin: 0 5px;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #0ff;
+  color: #111;
+  cursor: pointer;
+}
+
+#iframeButtons button:hover {
+  background-color: #0aa;
 }
