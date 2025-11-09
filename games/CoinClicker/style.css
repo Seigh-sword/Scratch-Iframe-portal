@@ -1,0 +1,57 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #111;
+  color: #fff;
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+/* Top row: score and upgrades */
+.top-row {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30px;
+}
+
+.score {
+  font-size: 1.5em;
+}
+
+.upgrades {
+  text-align: left;
+}
+
+#upgradeButtons button {
+  display: block;
+  margin: 5px 0;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background-color: #0ff;
+  color: #111;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#upgradeButtons button:hover {
+  background-color: #0aa;
+}
+
+/* Coin container */
+.coin-container {
+  margin-top: 20px;
+}
+
+#coin {
+  width: 150px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+#coin:active {
+  transform: scale(1.1);
+}
