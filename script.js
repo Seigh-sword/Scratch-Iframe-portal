@@ -1,72 +1,137 @@
+// -----------------------------
+// Elements
+// -----------------------------
 const gameCardsContainer = document.getElementById('gameCards');
-const gameFrame = document.getElementById('gameFrame');
 const iframeContainer = document.getElementById('iframeContainer');
+const gameFrame = document.getElementById('gameFrame');
 const backBtn = document.getElementById('backBtn');
 const fullscreenBtn = document.getElementById('fullscreenBtn');
-
-// Button click sound
 const clickSound = new Audio('assets/click-sfx.mp3');
 
-// Store folder names to avoid duplicates
+const searchInput = document.getElementById('searchInput');
+const sortFavBtn = document.getElementById('sortFavBtn');
+
+// -----------------------------
+// Globals
+// -----------------------------
 const loadedGames = new Set();
+let gamesData = [];
 
-// Load games from JSON
-fetch('gamesList.json')
-  .then(res => res.json())
-  .then(games => {
-    games.forEach(game => {
-      if (loadedGames.has(game.folder)) return; // skip duplicate
-      loadedGames.add(game.folder);
+// -----------------------------
+// Helper Functions
+// -----------------------------
+function playClick() {
+    clickSound.currentTime = 0;
+    clickSound.play();
+}
 
-      const card = document.createElement('div');
-      card.className = 'card';
+function createCard(game) {
+    const card = document.createElement('div');
+    card.className = 'card';
 
-      // Check for thumbnail
-      const thumbnailPath = `games/${game.folder}/tumbnail.png`;
-      card.innerHTML = `
-        <img src="${thumbnailPath}" alt="Thumbnail" class="thumbnail">
-        <h3>${game.name}</h3>
-        <p>By: ${game.author}</p>
-        <button>Play</button>
-        <div class="favorite-container">
-          <img src="assets/star-no.png" alt="Favorite" class="favoriteBtn">
-        </div>
-      `;
+    // Fallback thumbnail
+    const thumbnailPath = `games/${game.folder}/tumbnail.png`;
+    const img = document.createElement('img');
+    img.className = 'thumbnail';
+    img.alt = 'Thumbnail';
+    img.src = thumbnailPath;
+    img.onerror = () => { img.src = 'assets/default-thumbnail.png'; };
 
-      // Play button
-      card.querySelector('button').onclick = () => {
-        clickSound.play();
+    // Card innerHTML
+    card.appendChild(img);
+    const title = document.createElement('h3');
+    title.textContent = game.name;
+    card.appendChild(title);
+
+    const author = document.createElement('p');
+    author.textContent = `By: ${game.author}`;
+    card.appendChild(author);
+
+    // Play button
+    const playBtn = document.createElement('button');
+    playBtn.textContent = 'Play';
+    playBtn.onclick = () => {
+        playClick();
         gameFrame.src = `games/${game.folder}/index.html`;
-        iframeContainer.style.display = "block";
-        gameCardsContainer.style.display = "none";
-      };
+        iframeContainer.style.display = 'flex';
+        gameCardsContainer.style.display = 'none';
+    };
+    card.appendChild(playBtn);
 
-      // Favorite star toggle
-      const favoriteBtn = card.querySelector('.favoriteBtn');
-      let isFavorite = false;
-      favoriteBtn.addEventListener('click', () => {
-        clickSound.play();
-        isFavorite = !isFavorite;
-        favoriteBtn.src = isFavorite ? "assets/star-yes.png" : "assets/star-no.png";
-      });
+    // Favorite star
+    const favContainer = document.createElement('div');
+    favContainer.className = 'favorite-container';
+    const favBtn = document.createElement('img');
+    favBtn.className = 'favoriteBtn';
+    favBtn.src = localStorage.getItem(game.folder + '-fav') === 'true' ? 'assets/star-yes.png' : 'assets/star-no.png';
+    let isFav = favBtn.src.includes('star-yes.png');
 
-      gameCardsContainer.appendChild(card);
-    });
-  })
-  .catch(err => console.error('Error loading games:', err));
+    favBtn.onclick = () => {
+        playClick();
+        isFav = !isFav;
+        favBtn.src = isFav ? 'assets/star-yes.png' : 'assets/star-no.png';
+        favBtn.classList.add('clicked');
+        setTimeout(() => favBtn.classList.remove('clicked'), 300);
+        localStorage.setItem(game.folder + '-fav', isFav);
+    };
 
-// Back button
+    favContainer.appendChild(favBtn);
+    card.appendChild(favContainer);
+
+    gameCardsContainer.appendChild(card);
+}
+
+// -----------------------------
+// Load Games JSON
+// -----------------------------
+fetch('gamesList.json')
+    .then(res => res.json())
+    .then(games => {
+        gamesData = games;
+        games.forEach(game => {
+            if (!loadedGames.has(game.folder)) {
+                loadedGames.add(game.folder);
+                createCard(game);
+            }
+        });
+    })
+    .catch(err => console.error('Error loading games:', err));
+
+// -----------------------------
+// Iframe Controls
+// -----------------------------
 backBtn.addEventListener('click', () => {
-  clickSound.play();
-  iframeContainer.style.display = "none";
-  gameCardsContainer.style.display = "flex";
-  gameFrame.src = "";
+    playClick();
+    iframeContainer.style.display = 'none';
+    gameCardsContainer.style.display = 'flex';
+    gameFrame.src = '';
 });
 
-// Fullscreen button
 fullscreenBtn.addEventListener('click', () => {
-  clickSound.play();
-  if (gameFrame.requestFullscreen) {
-    gameFrame.requestFullscreen();
-  }
+    playClick();
+    if (gameFrame.requestFullscreen) gameFrame.requestFullscreen();
+});
+
+// -----------------------------
+// Search Filter
+// -----------------------------
+searchInput.addEventListener('input', () => {
+    const term = searchInput.value.toLowerCase();
+    gameCardsContainer.innerHTML = '';
+    gamesData.filter(game => game.name.toLowerCase().includes(term) || game.author.toLowerCase().includes(term))
+             .forEach(game => createCard(game));
+});
+
+// -----------------------------
+// Sort by Favorite
+// -----------------------------
+sortFavBtn.addEventListener('click', () => {
+    gameCardsContainer.innerHTML = '';
+    gamesData
+        .sort((a, b) => {
+            const aFav = localStorage.getItem(a.folder + '-fav') === 'true';
+            const bFav = localStorage.getItem(b.folder + '-fav') === 'true';
+            return bFav - aFav;
+        })
+        .forEach(game => createCard(game));
 });
